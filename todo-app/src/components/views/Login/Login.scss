@@ -1,0 +1,27 @@
+$background: #24282f;
+$white: #ffffff;
+
+.loginContainer {
+  min-width: 100vw;
+  min-height: 100vh;
+  background-color: $background;
+  display: flex;
+  flex-direction: column !important;
+  justify-content: center;
+  align-items: center;
+  color: $white;
+
+  .form {
+    width: 45vw;
+    height: 60vh;
+    display: flex;
+    flex-direction: column !important;
+    color: $white !important;
+    &__item {
+      width: 100% !important;
+      display: flex;
+      flex-direction: column !important;
+      justify-content: flex-start !important;
+    }
+  }
+}
