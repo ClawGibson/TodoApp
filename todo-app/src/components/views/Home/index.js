@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import apiURL from '../../../axios/axiosConfig';
 
 import { Row, Col, Typography, Input, Button, DatePicker } from 'antd';
+import { PlusCircleOutlined, LoginOutlined } from '@ant-design/icons';
 
 import Task from '../../commons/Task';
 
@@ -14,12 +16,16 @@ const Home = () => {
   const [title, setTitle] = useState('');
   const [currentTask, setCurrentTask] = useState('');
   const [dueDate, setDueDate] = useState('');
+  const history = useHistory();
   const user = useSelector((state) => state.todoAppStore);
 
   const { Title } = Typography;
 
   useEffect(() => {
     fetchTasks();
+    return () => {
+      setTasks([]);
+    };
   }, []);
 
   const fetchTasks = async () => {
@@ -27,7 +33,9 @@ const Home = () => {
       user: user.id,
     };
 
-    const response = await apiURL.get('/task/all', data);
+    const response = await apiURL.get('/task/all', {
+      params: data,
+    });
 
     setTasks(response?.data);
   };
@@ -48,8 +56,25 @@ const Home = () => {
     fetchTasks();
   };
 
+  const handleLogOut = () => {
+    history.replace('/login');
+  };
+
   return (
     <div className='home-container'>
+      <Button
+        type='link'
+        onClick={handleLogOut}
+        style={{
+          position: 'absolute',
+          top: '1rem',
+          right: '1rem',
+          color: '#FF0000',
+        }}
+        icon={<LoginOutlined />}
+      >
+        Log out
+      </Button>
       <Title level={1}>To do App</Title>
       <Row>
         <Title level={3}>Title</Title>
@@ -76,6 +101,7 @@ const Home = () => {
             <Button
               type='primary'
               onClick={handleAddTask}
+              icon={<PlusCircleOutlined />}
               style={{ width: '100%', marginTop: '1rem', marginBottom: '1rem' }}
             >
               Add
@@ -83,11 +109,26 @@ const Home = () => {
           </Col>
         </Row>
       </Row>
-      {tasks?.length > 0 ? (
-        tasks?.map((task) => <Task />)
-      ) : (
-        <Row>Loading...</Row>
-      )}
+      <div className='tasks-container'>
+        {tasks?.length > 0 ? (
+          tasks?.map((task) => (
+            <Col xs={24} xl={22}>
+              <Task
+                key={task.title}
+                user={task.user}
+                title={task.title}
+                status={task.status}
+                duedate={task.duedate}
+                description={task.description}
+              />
+            </Col>
+          ))
+        ) : (
+          <div style={{ textAlign: 'center', width: '100%' }}>
+            <Title level={2}>Add some tasks</Title>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

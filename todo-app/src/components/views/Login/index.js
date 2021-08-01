@@ -6,6 +6,7 @@ import { addTokenAction } from '../../../redux/actions/todoAppAction';
 import apiURL from '../../../axios/axiosConfig';
 
 import { Input, Row, Form, Button, Tabs, message } from 'antd';
+import { LoginOutlined } from '@ant-design/icons';
 
 import './Login.scss';
 
@@ -14,7 +15,6 @@ const Login = () => {
   const [form2] = Form.useForm();
 
   const history = useHistory();
-  const axios = require('axios');
   const dispatch = useDispatch();
   const { TabPane } = Tabs;
 
@@ -71,7 +71,7 @@ const Login = () => {
               >
                 <Input placeholder='Password' type='password' />
               </Form.Item>
-              <Button type='primary' htmlType='submit'>
+              <Button type='primary' htmlType='submit' icon={<LoginOutlined />}>
                 Log In
               </Button>
             </Row>
