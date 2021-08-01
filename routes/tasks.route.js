@@ -6,8 +6,9 @@ const router = express.Router();
 router.get('/all', async (req, res) => {
   try {
     const tasks = await Tasks.find({
-      user: req.body.user,
+      user: req.query.user,
     });
+
     if (!tasks)
       return res.status(404).send({
         message: 'No tasks found',
